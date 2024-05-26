@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -14,6 +13,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+
         return response()->json($users);
     }
 
@@ -25,11 +25,11 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-          ]);
-      
-          $user = User::create($validatedData);
-      
-          return response()->json($user, 201);
+        ]);
+
+        $user = User::create($validatedData);
+
+        return response()->json($user, 201);
     }
 
     /**
@@ -39,10 +39,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        if (!$user) {
-          return response()->json(['message' => 'User not found'], 404);
+        if (! $user) {
+            return response()->json(['message' => 'User not found'], 404);
         }
-    
+
         return response()->json($user);
     }
 
@@ -53,18 +53,18 @@ class UserController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $id,
-          ]);
-      
-          $user = User::find($id);
-      
-          if (!$user) {
+            'email' => 'sometimes|required|string|email|max:255|unique:users,email,'.$id,
+        ]);
+
+        $user = User::find($id);
+
+        if (! $user) {
             return response()->json(['message' => 'User not found'], 404);
-          }
-      
-          $user->update($validatedData);
-      
-          return response()->json(['message' => 'User updated successfully']);
+        }
+
+        $user->update($validatedData);
+
+        return response()->json(['message' => 'User updated successfully']);
     }
 
     /**
@@ -74,12 +74,12 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        if (!$user) {
-          return response()->json(['message' => 'User not found'], 404);
+        if (! $user) {
+            return response()->json(['message' => 'User not found'], 404);
         }
-    
+
         $user->delete();
-    
+
         return response()->json(['message' => 'User deleted successfully']);
     }
 }
